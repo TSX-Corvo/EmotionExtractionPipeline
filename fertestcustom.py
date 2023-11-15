@@ -110,7 +110,5 @@ def extract_emotions(folder="output"):
 
 
 if __name__ == "__main__":
-    # detect_emotion("test.jpg")
-
-    # extract_frames()
+    extract_frames(input_folder="videos", output_folder="output", fps="1/2")
     extract_emotions()

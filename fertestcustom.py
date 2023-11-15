@@ -22,7 +22,7 @@ WIDTH = 48
 HEIGHT = 48
 x = None
 y = None
-labels = ["Angry", "Disgust", "Fear", "Happy", "Sad", "Surprise", "Neutral"]
+labels = ["Anger", "Disgust", "Fear", "Enjoyment", "Sadness", "Surprise", "Neutral"]
 
 # loading image
 full_size_image = cv2.imread("test.jpg")
@@ -46,16 +46,9 @@ for x, y, w, h in faces:
     cv2.rectangle(full_size_image, (x, y), (x + w, y + h), (0, 255, 0), 1)
     # predicting the emotion
     yhat = loaded_model.predict(cropped_img)
-    cv2.putText(
-        full_size_image,
-        labels[int(np.argmax(yhat))],
-        (x, y),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.8,
-        (0, 255, 0),
-        1,
-        cv2.LINE_AA,
-    )
+
+    print(yhat)
+
     print("Emotion: " + labels[int(np.argmax(yhat))])
 
 #     print("Emotion: " + labels[int(np.argmax(yhat))])

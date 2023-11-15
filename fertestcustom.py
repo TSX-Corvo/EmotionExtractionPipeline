@@ -1,5 +1,6 @@
 # load json and create model
 from __future__ import division
+from typing import List, Tuple
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.models import model_from_json
@@ -27,7 +28,7 @@ labels = ["Anger", "Disgust", "Fear", "Enjoyment", "Sadness", "Surprise", "Neutr
 # loading image
 
 
-def detect_emotion(img_filename: str):
+def detect_emotion(img_filename: str) -> Tuple[str, List[float]]:
     full_size_image = cv2.imread(img_filename)
     # print("Image Loaded")
     gray = cv2.cvtColor(full_size_image, cv2.COLOR_RGB2GRAY)
@@ -52,9 +53,11 @@ def detect_emotion(img_filename: str):
         # predicting the emotion
         yhat = loaded_model.predict(cropped_img)
 
-        # print(yhat)
+        scores = np.argsort(np.max(yhat, axis=0))
 
-        print("Emotion: " + labels[int(np.argmax(yhat))])
+        max_index = scores[-1] if scores[-1] != 6 else scores[-2]
+
+        return labels[max_index]
 
 
 detect_emotion("test.jpg")

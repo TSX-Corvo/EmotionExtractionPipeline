@@ -25,33 +25,36 @@ y = None
 labels = ["Anger", "Disgust", "Fear", "Enjoyment", "Sadness", "Surprise", "Neutral"]
 
 # loading image
-full_size_image = cv2.imread("test.jpg")
-print("Image Loaded")
-gray = cv2.cvtColor(full_size_image, cv2.COLOR_RGB2GRAY)
-face = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-faces = face.detectMultiScale(gray, 1.3, 10)
 
-# detecting faces
-for x, y, w, h in faces:
-    roi_gray = gray[y : y + h, x : x + w]
-    cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
-    cv2.normalize(
-        cropped_img,
-        cropped_img,
-        alpha=0,
-        beta=1,
-        norm_type=cv2.NORM_L2,
-        dtype=cv2.CV_32F,
-    )
-    cv2.rectangle(full_size_image, (x, y), (x + w, y + h), (0, 255, 0), 1)
-    # predicting the emotion
-    yhat = loaded_model.predict(cropped_img)
 
-    print(yhat)
+def detect_emotion(img_filename: str):
+    full_size_image = cv2.imread(img_filename)
+    # print("Image Loaded")
+    gray = cv2.cvtColor(full_size_image, cv2.COLOR_RGB2GRAY)
+    face = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+    faces = face.detectMultiScale(gray, 1.3, 10)
 
-    print("Emotion: " + labels[int(np.argmax(yhat))])
+    # detecting faces
+    for x, y, w, h in faces:
+        roi_gray = gray[y : y + h, x : x + w]
+        cropped_img = np.expand_dims(
+            np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0
+        )
+        cv2.normalize(
+            cropped_img,
+            cropped_img,
+            alpha=0,
+            beta=1,
+            norm_type=cv2.NORM_L2,
+            dtype=cv2.CV_32F,
+        )
+        cv2.rectangle(full_size_image, (x, y), (x + w, y + h), (0, 255, 0), 1)
+        # predicting the emotion
+        yhat = loaded_model.predict(cropped_img)
 
-#     print("Emotion: " + labels[int(np.argmax(yhat))])
+        # print(yhat)
 
-# cv2.imshow('Emotion', full_size_image)
-# cv2.waitKey()
+        print("Emotion: " + labels[int(np.argmax(yhat))])
+
+
+detect_emotion("test.jpg")

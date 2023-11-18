@@ -100,7 +100,7 @@ def extract_emotions(folder="output"):
 
         max_index = sorted_scores[-1] if sorted_scores[-1] != 6 else sorted_scores[-2]
 
-        results.append(f"{_dir}.mp4, {labels[max_index]}\n")
+        results.append(f"test/{_dir}.mp4, {labels[max_index]}\n")
 
     results = sorted(results)
 
